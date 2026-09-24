@@ -1,0 +1,293 @@
+/* Varibles usadas en todas las paginas*/
+:root {
+  --color-bg: #1e4029;         /* Verde pitch — fondo principal (primario) */
+  --color-bg-dark: #12271a;    /* variante más oscura, para degradés */
+  --color-gold: #c7a233;       /* Dorado — acento principal (secundario) */
+  --color-gold-light: #e2c568; /* dorado claro, para hover / brillo */
+  --color-navy: #1b2a4a;       /* Azul noche — acento terciario */
+  --color-copper: #b8792a;     /* Ámbar — advertencia */
+  --color-cream: #e3ddc9;      /* Papel — texto principal sobre fondo oscuro */
+  --color-cream-muted: #b9b39f;/* Papel apagado — texto secundario */
+  --color-success: #3d7a4c;    /* Verde césped — confirmación */
+  --color-info: #3b6ea5;       /* Azul información */
+  --color-danger: #a13d2e;     /* Rojo ladrillo — alerta */
+
+  --font-title: "Archivo Black", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* el padding no rompe el ancho de los elementos */
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-cream);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* NAVBAR (de todas las paginas)*/
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 40px;
+  background: rgba(18, 39, 26, 0.95);
+  border-bottom: 1px solid var(--color-gold);
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+.navbar__logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.navbar__title strong {
+  color: var(--color-gold);
+}
+
+.navbar__menu {
+  display: flex;
+  gap: 28px;
+}
+
+.navbar__menu a {
+  font-size: 0.95rem;
+  color: var(--color-cream-muted);
+  transition: color 0.2s ease;
+}
+
+.navbar__menu a:hover,
+.navbar__menu a.active {
+  color: var(--color-gold);
+}
+
+/* Botón hamburguesa: oculto en escritorio */
+.navbar__toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.navbar__toggle span {
+  width: 24px;
+  height: 2px;
+  background: var(--color-cream);
+}
+
+/* RESPONSIVE (celulares) */
+@media (max-width: 768px) {
+  .navbar__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: rgba(18, 39, 26, 0.98);
+    padding: 20px 40px;
+    gap: 16px;
+    display: none; /* se muestra con JS al tocar el botón hamburguesa */
+  }
+
+  .navbar__menu.open {
+    display: flex;
+  }
+
+  .navbar__toggle {
+    display: flex;
+  }
+}
+
+/* BOTONES */
+.btn {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.86 rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn--primary { /*Boton de cronograma*/
+  background: var(--color-gold);        
+  color: var(--color-navy);
+  border-radius: 999px;                 
+  box-shadow: 0 8px 20px rgba(199, 162, 51, 0.35);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(199, 162, 51, 0.45);
+}
+
+
+
+/* BOTONES FLOTANTES (Instagram / WhatsApp) */
+.floating-buttons {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 50;
+}
+
+.floating-buttons__btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+}
+
+/* Instagram */
+.floating-buttons__btn--instagram {
+  background: radial-gradient(
+    circle at 30% 110%,
+    #feda75 0%,
+    #fa7e1e 30%,
+    #d62976 60%,
+    #962fbf 80%,
+    #4f5bd5 100%
+  );
+  color: white;
+}
+
+/* WhatsApp */
+.floating-buttons__btn--whatsapp {
+  background: #25d366;
+  color: white;
+}
+
+/* Efecto al pasar el mouse */
+.floating-buttons__btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.5);
+}
+
+/* Encabezado en Cronograma, posiciones, estadísticas...*/
+.page-header { /*Agrupa elementos a la izquierda y el icono a la derecha*/
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 48px 40px;
+  border-bottom: 1px solid rgba(199, 162, 51, 0.2);
+}
+
+.page-header__text { /*Linea dorada debajo del titulo*/
+  position: relative;
+  padding-left: 20px;
+  border-left: 3px solid var(--color-gold);
+}
+
+.page-header__title {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  color: var(--color-cream);
+  margin-bottom: 6px;
+}
+
+.page-header__subtitle {
+  color: var(--color-cream-muted);
+  font-size: 0.95rem;
+}
+
+.page-header__icon { /*Le da color y tamaño al icono del calendario*/
+  font-size: 1.6rem;
+  color: var(--color-gold-light);
+}
+
+/* Contenedor general que agrupa las 4 filas (Estado, Categoría, Fecha, Día) una debajo de la otra*/
+.filters {
+  padding: 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.filters__group {
+  display: flex;
+  gap: 10px; /*Separación entre los botones*/
+  flex-wrap: wrap;  /* Si no entran todos en una línea, el sobrante salta abajo */
+}
+
+.filter-chip { /*Es el estilo base compartido por todos los botones*/
+  background: rgba(199, 162, 51, 0.06);           
+  border: 1px solid rgba(199, 162, 51, 0.6);     
+  color: var(--color-cream);
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer; /*el mouse se convierte en "manito" al pasar por encima */
+  transition: background 0.2s ease, color 0.2s ease; /*/* anima el cambio de color en vez de que sea instantáneo */
+
+}
+
+/* Se suma por encima de .filter-chip cuando el botón está seleccionado/activo */
+.filter-chip--active {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+  color: var(--color-bg-dark);
+}
+
+/* Las etiquetas de texto "FECHA" y "DÍA" que van al lado de sus respectivos botones */
+.filters__label {
+  font-size: 0.75rem;
+  text-transform: uppercase; /*Texto en mayusculas*/
+  letter-spacing: 1px; /*Separacion de letras*/
+  color: var(--color-cream-muted);
+  align-self: center;
+  margin-right: 4px;
+}
+
+.date-input {
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-navy);
+  color: var(--color-cream);
+  padding: 8px 14px;
+  border-radius: 6px;  /* esquinas apenas redondeadas*/
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+}
+
+/*Iniciales que se usan en resultados y cronogramas*/
+.match-card__badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-navy);
+  color: var(--color-cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}

@@ -1,0 +1,224 @@
+/* =========================================================
+   3. HERO (sección principal, la más grande de la imagen)
+   ========================================================= */
+.hero {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+
+  background:
+    radial-gradient(circle at 50% 30%, rgba(199, 162, 51, 0.28), transparent 60%),
+    linear-gradient(180deg, var(--color-bg-dark) 0%, #16301f 45%, var(--color-navy) 100%);
+  background-size: cover;
+  background-position: center;
+}
+
+/* Capa oscura semitransparente encima de la foto, para que el
+   texto blanco siempre se lea bien sin importar la imagen de fondo */
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(18, 39, 26, 0.55) 0%, rgba(18, 39, 26, 0.85) 100%);
+}
+
+.hero__content {
+  position: relative; /* para quedar por encima del overlay */
+  z-index: 2;
+  max-width: 700px;
+  padding: 0 20px;
+}
+
+.hero__title {
+  font-family: var(--font-title);
+  line-height: 1.15;
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 24px;
+  color: var(--color-cream);
+}
+
+.hero__title--accent {
+  color: var(--color-gold);
+}
+
+.hero__subtitle {
+  color: var(--color-cream-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+.hero__tagline {
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  color: var(--color-cream);
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.hero__ornament {
+  width: 60px;
+  height: 1px;
+  background: var(--color-gold);
+  margin: 0 auto 20px;   /* centrada, con separación abajo respecto al texto siguiente */
+}
+
+/*Datos de la temporada*/
+.hero__season {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 14px;
+  color: var(--color-cream);
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.hero__season-line {
+  width: 24px;
+  height: 1px;
+  background: var(--color-gold);
+}
+
+.hero__stats {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 8px;
+}
+
+.hero__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero__stat-number {
+  font-family: var(--font-title);
+  color: var(--color-gold);
+  font-size: 1.4rem;
+}
+
+.hero__stat-label {
+  color: var(--color-cream-muted);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* 5. BLOQUE "Segui el torneo desde tu celular"*/
+.hero__app {
+  margin-top: 48px;
+}
+
+.hero__app p {
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  color: var(--color-cream-muted);
+  margin-bottom: 14px;
+}
+
+.hero__app-badges {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.app-badge {
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-navy);
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--color-cream);
+}
+
+/*Titulos de seccion: "Proximos partidos" "Ultimos resultados"*/
+
+.section-title{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 40px;
+  margin: 48px 0 24px;
+}
+
+.section-title::before{
+  content:"";
+  width: 3px;
+  height: 24px;
+  background: var(--color-gold);
+}
+
+.section-title h2{
+  font-family: var(--font-title);
+  font-size: 1.3rem;
+  color: var(--color-cream);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/*Estado vacio: "No hay partidos programados..."*/
+.empty-state{
+  text-align: center;
+  padding: 40px 20px 60px;
+  color: var(--color-cream-muted);
+}
+.empty-state i{
+  font-size: 2rem;
+  margin-bottom: 12px;
+  color: var(--color-gold);
+  display:block;
+}
+
+/*Grilla de ultimos resultados*/
+.results-grid{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+  padding: 0 40px 60px;
+}
+.result-card{
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-navy);
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+.result-card__meta{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.result-card__status{
+  background: var(--color-cream-muted);
+  color: var(--color-bg-dark);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+.result-card__info{
+  color: var(--color-gold);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.result-card__match{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.result-card__score{
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  color: var(--color-cream);
+}

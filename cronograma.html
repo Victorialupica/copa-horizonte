@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cronograma — Copa horizonte</title>
+<!--Fuentes-->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"> <!--Iconos-->
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles-cronograma.css" />
+</head>
+<body>
+<!--Mismo encabezado de index-->    
+<header class="navbar">
+  <div class="navbar__brand">
+    <img src="assets/logo-escudo-transparente.png" alt="Escudo Superliga Hockey Córdoba" class="navbar__logo" />
+    <span class="navbar__title">COPA <strong>HORIZONTE</strong></span>
+  </div>
+
+  <button class="navbar__toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="navbar__menu" id="navMenu">
+    <a href="index.html">Inicio</a> <!--Enlace a la página de inicio-->
+    <a href="cronograma.html" class="active">Cronograma</a> <!--Ahora ponemos este en active para que se muestre como la página actual-->
+    <a href="posiciones.html">Posiciones</a>
+    <a href="estadisticas.html">Estadísticas</a>
+    <a href="jugadoras.html">Jugadoras</a>
+    <a href="equipos.html">Equipos</a>
+    <a href="galeria.html">Galería</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+</header>
+<section class="page-header"> <!--Le ponemos un nombre generico para poder reutilizarlo-->
+  <div class="page-header__text"> <!--Agrupa el titulo con el texto de abajo-->
+    <h1 class="page-header__title">Cronograma</h1>
+    <p class="page-header__subtitle">Fixture completo · Temporada 2026</p>
+  </div>
+
+  <i class="fa-regular fa-calendar page-header__icon"></i> <!-- Icono de calendario -->
+</section>
+<section class="filters">
+  <div class="filters__group" id="statusFilters">
+    <button class="filter-chip filter-chip--active" data-filter="todos">Todos</button> <!--Data filter es una etiqueta invisible para que js lo pueda distinguir-->
+    <button class="filter-chip" data-filter="proximos">Próximos</button>
+    <button class="filter-chip" data-filter="en-vivo">En vivo</button>
+    <button class="filter-chip" data-filter="finalizados">Finalizados</button>
+  </div>
+
+  <div class="filters__group" id="categoryFilters">
+    <button class="filter-chip filter-chip--active" data-category="todas">Todas</button>
+    <button class="filter-chip" data-category="sub-14">Sub 14</button>
+    <button class="filter-chip" data-category="sub-16">Sub 16</button>
+    <button class="filter-chip" data-category="sub-19">Sub 19</button>
+    <button class="filter-chip" data-category="intermedia">Intermedia</button>
+    <button class="filter-chip" data-category="primera">Primera</button>
+  </div>
+
+  <div class="filters__group">
+    <span class="filters__label">Fecha</span>
+    <button class="filter-chip filter-chip--active" data-fecha="todas">Todas</button>
+    <button class="filter-chip" data-fecha="1">1</button>
+    <button class="filter-chip" data-fecha="2">2</button>
+  </div>
+
+  <div class="filters__group">
+    <span class="filters__label">Día</span>
+    <input type="date" id="dayFilter" class="date-input" />
+  </div>  
+<div class="match-day">
+  <p class="match-day__date">Sábado, 22 de agosto</p>
+
+  <ul class="matches-list" id="matchesList"> <!--Nombre unico que js usa para encontrar los elementos-->
+  <!--Aqui java inserta la informacion de los partidos-->    
+  </ul>
+</div>  
+</section>
+<script src="script.js"></script>
+</body>
+</html>

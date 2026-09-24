@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Copa horizonte hockey</title>
+
+  <!-- Fuente de Google Fonts: una para títulos y otra para texto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+
+  <!-- Vinculamos hoja de estilos y script -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"> <!--Biblioteca de iconos-->
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles-index.css"/>
+  
+</head>
+<body>
+  <header class="navbar"> <!--Encabezado de la pagina-->
+    <div class="navbar__brand"> <!--Sirve para agrupar el logo y el título -->
+      <img src="assets/logo-escudo-transparente.png" alt="Escudo Superliga Hockey Córdoba" class="navbar__logo" />
+      <span class="navbar__title">COPA <strong>HORIZONTE</strong></span>
+    </div>
+
+    <!-- Icono de tres rayitas que aparece en el celular -->
+    <button class="navbar__toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false"> <!-- toggle indica que aparece solo en la compu, y el id debe ser unico-->
+      <span></span>
+      <span></span>
+      <span></span> 
+    </button> <!--Cierra el boton-->
+
+    <nav class="navbar__menu" id="navMenu"> <!--Bloque de enlaces de navegacion-->
+      <a href="index.html" class="active">Inicio</a> <!-- "a href" permite poner un link. Active es lo que indica que ahi estas parado en este momento -->
+      <a href="cronograma.html">Cronograma</a>
+      <a href="posiciones.html">Posiciones</a>
+      <a href="estadisticas.html">Estadísticas</a>
+      <a href="jugadoras.html">Jugadoras</a>
+      <a href="equipos.html">Equipos</a>
+      <a href="galeria.html">Galería</a>
+      <a href="contacto.html">Contacto</a>
+    </nav> <!--Cierra el menu de navegacion-->
+  </header>
+
+  <!-- Fondo principal-->
+  <section class="hero" id="inicio"> <!--Hero es el estilo visual grande — el fondo, la altura, el centrado-->
+    <div class="hero__overlay"></div>
+
+    <div class="hero__content">
+  
+  <div class="hero__season">
+  <span class="hero__season-line"></span>
+  <span>Temporada 2026</span>
+  <span class="hero__season-line"></span>
+</div>
+
+<h1 class="hero__title">
+  <span>COPA</span>
+  <span class="hero__title--accent">HORIZONTE</span>
+</h1>
+
+<p class="hero__tagline">Liga de Hockey</p>
+
+<div class="hero__ornament"></div>
+
+      <a href="cronograma.html" class="btn btn--primary">Ver cronograma</a>
+       
+      <div class="hero__stats">
+  <div class="hero__stat">
+    <span class="hero__stat-number">12</span>
+    <span class="hero__stat-label">Equipos</span>
+  </div>
+  <div class="hero__stat">
+    <span class="hero__stat-number">48</span>
+    <span class="hero__stat-label">Partidos</span>
+  </div>
+  <div class="hero__stat">
+    <span class="hero__stat-number">6</span>
+    <span class="hero__stat-label">Canchas</span>
+  </div>
+</div>
+
+      <div class="hero__app">
+        <p>Seguí el torneo desde tu celular</p>
+        <div class="hero__app-badges">
+         <a href="#" class="app-badge"><i class="fa-brands fa-apple"></i> App Store</a>
+         <a href="#" class="app-badge"><i class="fa-brands fa-google-play"></i> Google Play</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Botones flotantes -->
+  <div class="floating-buttons">
+  <a href="#" class="floating-buttons__btn floating-buttons__btn--instagram" aria-label="Instagram">
+    <i class="fa-brands fa-instagram"></i> <!-- Icono de Instagram -->
+  </a>
+
+  <a href="#" class="floating-buttons__btn floating-buttons__btn--whatsapp" aria-label="WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i> <!-- Icono de WhatsApp -->
+  </a>
+</div>
+
+<section>
+  <div class="section-title">
+    <h2>Proximos partidos</h2>
+  </div>
+
+  <div class="empty-state">
+    <i class="fa-regular fa-calendar"></i>
+    <p>No hay partidos programados proximamente.</p>
+  </div>
+  </section>
+
+  <section>
+    <div class="section-title">
+      <h2>Ultimos resultados</h2>
+    </div>
+
+    <div class="results-grid" id="resultsGrid">
+   
+  </div>
+</section>
+<script src="script.js"></script>
+  
+</body>
+</html>

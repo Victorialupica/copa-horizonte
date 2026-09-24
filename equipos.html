@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equipos — Copa Horizonte</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles-equipos.css"/>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar__brand">
+      <img src="assets/logo-escudo-transparente.png" alt="Escudo Copa Horizonte" class="navbar__logo" />
+      <span class="navbar__title">COPA <strong>HORIZONTE</strong></span>
+    </div>
+
+    <button class="navbar__toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="navbar__menu" id="navMenu">
+      <a href="index.html">Inicio</a>
+      <a href="cronograma.html">Cronograma</a>
+      <a href="posiciones.html">Posiciones</a>
+      <a href="estadisticas.html">Estadísticas</a>
+      <a href="jugadoras.html">Jugadoras</a>
+      <a href="equipos.html" class="active">Equipos</a>
+      <a href="galeria.html">Galería</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <div class="page-header__text">
+      <h1 class="page-header__title">Equipos</h1>
+      <p class="page-header__subtitle" id="teamsSubtitle">Temporada 2026</p>
+    </div>
+    <i class="fa-solid fa-shield-halved page-header__icon"></i>
+  </section>
+
+  <section class="filters">
+    <div class="team-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="teamSearch" placeholder="Buscar equipo..." />
+    </div>
+
+    <div class="filters__group" id="teamCategoryFilters">
+      <button class="filter-chip filter-chip--active" data-category="Todos">Todos</button>
+      <button class="filter-chip" data-category="Sub 14">Sub 14</button>
+      <button class="filter-chip" data-category="Sub 16">Sub 16</button>
+      <button class="filter-chip" data-category="Sub 19">Sub 19</button>
+      <button class="filter-chip" data-category="Intermedia">Intermedia</button>
+      <button class="filter-chip" data-category="Primera">Primera</button>
+    </div>
+  </section>
+
+  <div class="teams-grid" id="teamsGrid">
+    <!-- JS inserta las tarjetas de equipos acá -->
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
