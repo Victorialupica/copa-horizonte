@@ -42,6 +42,10 @@ async function cargarPartidos() { // Esta funcion trae los datos de la direcció
     mostrarResultadosHome(partidos);
   }
 
+  if (document.getElementById("upcomingGrid")) {
+    mostrarProximosHome(partidos);
+  }
+
   if (document.getElementById("standingsBody")) {
     const categoriaActiva = document
       .querySelector("#categoryFilters .filter-chip--active")
@@ -168,6 +172,46 @@ function mostrarResultadosHome(partidos) {
     contenedor.appendChild(tarjeta);
   });
 }
+
+function mostrarProximosHome(partidos) {
+  const contenedor = document.getElementById("upcomingGrid");
+  contenedor.innerHTML = "";
+
+  const proximos = partidos.filter(partido => partido.estado === "Próximo");
+  const proximosTres = proximos.slice(0, 3); // mostramos solo los 3 más cercanos
+
+  if (proximosTres.length === 0) {
+    contenedor.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-regular fa-calendar"></i>
+        <p>No hay partidos programados proximamente.</p>
+      </div>
+    `;
+    return;
+  }
+
+  proximosTres.forEach(partido => {
+    const tarjeta = document.createElement("div");
+    tarjeta.className = "result-card";
+    tarjeta.innerHTML = `
+      <div class="result-card__meta">
+      <span class="result-card__status">${partido.estado}</span>
+      <span class="result-card__info">${partido.categoria} · ${partido.fecha}</span>
+      </div>
+      <div class="result-card__match">
+      <div class="result-card__team">
+      <span class="match-card__badge">${iniciales(partido.equipo_local)}</span>
+      </div>
+      <span class="result-card__score">vs</span>
+      <div class="result-card__team">
+      <span class="match-card__badge">${iniciales(partido.equipo_visitante)}</span>
+      </div>
+      </div>
+    `;
+    contenedor.appendChild(tarjeta);
+  });
+}
+
 
 // Guardamos todos los partidos una vez cargados, para no tener que
 // volver a pedirlos cada vez que cambia el filtro de categoría
