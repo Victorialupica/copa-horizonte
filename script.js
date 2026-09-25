@@ -30,7 +30,7 @@ async function cargarPartidos() { // Esta funcion trae los datos de la direcció
   const response = await fetch(SHEET_CSV_URL); // fetch te devuelve la promesa de que el dato va a llegar
   const csvText= await response.text();
   const partidos = parsearCSV(csvText);
-
+  await cargarLogosEquipos();
   todosLosPartidos = partidos; // guardo los partidos en una variable global para poder filtrar después
   // Solo intenta mostrar en Cronograma si ese contenedor existe en esta página
   if (document.getElementById("matchesList")) {
@@ -54,7 +54,6 @@ async function cargarPartidos() { // Esta funcion trae los datos de la direcció
   }
 
   if (document.getElementById("teamsGrid")) {
-  await cargarLogosEquipos();
   todosLosEquipos = calcularTodosLosEquipos(partidos);
   aplicarFiltrosEquipos();
   }
@@ -117,6 +116,14 @@ function iniciales(nombreEquipo) { // devuelve las iniciales de un equipo
   .slice(0, 2);
 }
 
+// Devuelve el logo del equipo si existe, o el círculo con iniciales si no
+function renderBadge(nombre) {
+  const logo = logosEquipos[nombre];
+  return logo
+    ? `<img src="${logo}" alt="${nombre}" class="match-card__badge" style="object-fit: contain; background: var(--color-bg-dark);" onerror="this.outerHTML='<span class=&quot;match-card__badge&quot;>${iniciales(nombre)}</span>'" />`
+    : `<span class="match-card__badge">${iniciales(nombre)}</span>`;
+}
+
 function mostrarPartidos(partidos) {
   const contenedor = document.getElementById("matchesList");
   contenedor.innerHTML = "";
@@ -130,7 +137,7 @@ function mostrarPartidos(partidos) {
       </div>
       <div class="match-card__team">
         <span class="match-card__team-name">${partido.equipo_local}</span>
-        <span class = "match-card__badge">${iniciales(partido.equipo_local)}</span>
+        ${renderBadge(partido.equipo_local)}
       </div>
       <div class="match-card__score">
         <span> ${partido.goles_local}</span>
@@ -138,7 +145,7 @@ function mostrarPartidos(partidos) {
         <span> ${partido.goles_visitante}</span>
       </div>
       <div class="match-card__team match-card__team--away">
-        <span class="match-card__badge">${iniciales(partido.equipo_visitante)}</span>
+       ${renderBadge(partido.equipo_visitante)}
         <span class = "match-card__team-name">${partido.equipo_visitante}</span>
       </div>
       <div class= "match-card__info">
@@ -167,12 +174,11 @@ function mostrarResultadosHome(partidos) {
       </div>
       <div class="result-card__match">
         <div class="result-card__team">
-          <span class="match-card__badge">${iniciales(partido.equipo_local)}</span>
+          ${renderBadge(partido.equipo_local)}
         </div>
         <span class="result-card__score">${partido.goles_local} — ${partido.goles_visitante}</span>
         <div class="result-card__team">
-          <span class="match-card__badge">${iniciales(partido.equipo_visitante)}</span>
-        </div>
+          ${renderBadge(partido.equipo_visitante)}
       </div>
     `;
     contenedor.appendChild(tarjeta);
@@ -206,11 +212,11 @@ function mostrarProximosHome(partidos) {
       </div>
       <div class="result-card__match">
       <div class="result-card__team">
-      <span class="match-card__badge">${iniciales(partido.equipo_local)}</span>
+      ${renderBadge(partido.equipo_local)}
       </div>
       <span class="result-card__score">vs</span>
       <div class="result-card__team">
-      <span class="match-card__badge">${iniciales(partido.equipo_visitante)}</span>
+      ${renderBadge(partido.equipo_visitante)}
       </div>
       </div>
     `;
