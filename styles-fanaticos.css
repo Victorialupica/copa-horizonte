@@ -1,0 +1,105 @@
+.fan-section {
+  padding: 0 40px 40px;
+}
+
+.vote-card {
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-navy);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 480px;
+}
+
+.vote-bar-row {
+  margin-bottom: 14px;
+}
+
+.vote-bar-row__top {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-cream);
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.vote-bar-track {
+  background: var(--color-bg);
+  border-radius: 999px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.vote-bar-fill {
+  background: var(--color-gold);
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.vote-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.vote-confirmation {
+  color: var(--color-cream-muted);
+  font-size: 0.75rem;
+  margin-top: 10px;
+}
+
+.fan-identify {
+  padding: 24px 40px 0;
+}
+
+.identify-card {
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-gold);
+  border-radius: 12px;
+  padding: 20px 24px;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.identify-card p {
+  color: var(--color-cream-muted);
+  font-size: 0.85rem;
+  flex: 1 1 100%;
+}
+
+.identify-input {
+  background: var(--color-bg);
+  border: 1px solid var(--color-navy);
+  color: var(--color-cream);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  flex: 1;
+  min-width: 160px;
+}
+
+.identify-greeting {
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-navy);
+  border-radius: 12px;
+  padding: 16px 24px;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-cream);
+  font-size: 0.9rem;
+}
+
+.identify-greeting button {
+  background: none;
+  border: none;
+  color: var(--color-cream-muted);
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: underline;
+}

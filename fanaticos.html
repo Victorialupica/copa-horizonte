@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fanáticos — Copa Horizonte</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="styles-base.css" />
+  <link rel="stylesheet" href="styles-fanaticos.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar__brand">
+      <img src="assets/logo-escudo-transparente.png" alt="Escudo Copa Horizonte" class="navbar__logo" />
+      <span class="navbar__title">COPA <strong>HORIZONTE</strong></span>
+    </div>
+
+    <button class="navbar__toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="navbar__menu" id="navMenu">
+      <a href="index.html">Inicio</a>
+      <a href="cronograma.html">Cronograma</a>
+      <a href="posiciones.html">Posiciones</a>
+      <a href="estadisticas.html">Estadísticas</a>
+      <a href="jugadoras.html">Jugadoras</a>
+      <a href="equipos.html">Equipos</a>
+      <a href="fanaticos.html" class="active">Fanáticos</a>
+      <a href="galeria.html">Galería</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <div class="page-header__text">
+      <h1 class="page-header__title">Fanáticos</h1>
+      <p class="page-header__subtitle">Votá y hacé sentir tu apoyo · Temporada 2026</p>
+    </div>
+    <i class="fa-solid fa-heart page-header__icon"></i>
+  </section>
+
+  <section class="fan-identify" id="fanIdentify">
+    <!-- JS llena esto: el formulario, o el saludo si ya te identificaste -->
+  </section>
+
+  <section class="fan-section">
+    <div class="section-title">
+      <h2>¿Cuál es tu equipo favorito?</h2>
+    </div>
+
+    <div class="vote-card" id="favoriteTeamVote">
+      <!-- JS arma acá las barras + botones -->
+    </div>
+  </section>
+
+  <div class="floating-buttons">
+    <a href="#" class="floating-buttons__btn floating-buttons__btn--instagram" aria-label="Instagram">
+      <i class="fa-brands fa-instagram"></i>
+    </a>
+    <a href="#" class="floating-buttons__btn floating-buttons__btn--whatsapp" aria-label="WhatsApp">
+      <i class="fa-brands fa-whatsapp"></i>
+    </a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
