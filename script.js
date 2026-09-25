@@ -276,7 +276,7 @@ if (categoryFilters) {
 // Pagina de equipos
 // Esta funcion arma un diccionario con los logos de cada equipo
 let logosEquipos = {}; 
-
+let linksEquipos = {}; 
 async function cargarLogosEquipos() {
   try {
     const response = await fetch(SHEET_EQUIPOS_CSV_URL);
@@ -287,6 +287,10 @@ async function cargarLogosEquipos() {
       if (fila.nombre_equipo && fila.logo_url) {
        logosEquipos[fila.nombre_equipo.trim()] = armarLinkImagenDrive(fila.logo_url.trim());
       }
+      if (fila.nombre_equipo && fila.link_equipo) {
+        linksEquipos[fila.nombre_equipo.trim()] = fila.link_equipo.trim();
+      }
+      
     });
     
   } catch (error) {
@@ -336,8 +340,14 @@ function mostrarEquipos(equipos) {
 
   equipos.forEach(equipo => {
     const logo = logosEquipos[equipo.nombre];
-    const tarjeta = document.createElement("div");
+    const link = linksEquipos[equipo.nombre];
+    const tarjeta = document.createElement("a");
     tarjeta.className = "team-card";
+    if (link) {
+      tarjeta.href = link;
+      tarjeta.target = "_blank";
+      tarjeta.rel = "noopener";
+    }
     tarjeta.innerHTML = `
       ${logo
   ? `<img src="${logo}" alt="${equipo.nombre}" class="team-card__badge" style="object-fit: contain; background: var(--color-bg-dark);" onerror="this.outerHTML='<div class=&quot;team-card__badge&quot;>${iniciales(equipo.nombre)}</div>'" />`
