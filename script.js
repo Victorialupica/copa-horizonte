@@ -34,8 +34,8 @@ async function cargarPartidos() { // Esta funcion trae los datos de la direcció
   todosLosPartidos = partidos; // guardo los partidos en una variable global para poder filtrar después
   // Solo intenta mostrar en Cronograma si ese contenedor existe en esta página
   if (document.getElementById("matchesList")) {
-    mostrarPartidos(partidos);
-  }
+  aplicarFiltrosCronograma();
+}
 
   // Solo intenta mostrar en la portada si ese contenedor existe en esta página
   if (document.getElementById("resultsGrid")) {
@@ -389,6 +389,54 @@ if (teamSearch) {
   teamSearch.addEventListener("input", (e) => {
     busquedaEquipo = e.target.value;
     aplicarFiltrosEquipos();
+  });
+}
+
+/*Filtros de cronograma*/
+let estadoCronogramaActivo = "todos";
+let categoriaCronogramaActiva = "Todas";
+
+function aplicarFiltrosCronograma() {
+  const filtrados = todosLosPartidos.filter(partido => {
+    const coincideEstado =
+      estadoCronogramaActivo === "todos" ||
+      (estadoCronogramaActivo === "proximos" && partido.estado === "Próximo") ||
+      (estadoCronogramaActivo === "finalizados" && partido.estado === "Final");
+
+    const coincideCategoria =
+      categoriaCronogramaActiva === "Todas" || partido.categoria === categoriaCronogramaActiva;
+
+    return coincideEstado && coincideCategoria;
+  });
+
+  mostrarPartidos(filtrados);
+}
+
+const statusFilters = document.getElementById("statusFilters");
+if (statusFilters) {
+  statusFilters.addEventListener("click", (e) => {
+    const boton = e.target.closest(".filter-chip");
+    if (!boton) return;
+
+    statusFilters.querySelectorAll(".filter-chip").forEach(chip => chip.classList.remove("filter-chip--active"));
+    boton.classList.add("filter-chip--active");
+
+    estadoCronogramaActivo = boton.dataset.filter;
+    aplicarFiltrosCronograma();
+  });
+}
+
+const cronogramaCategoryFilters = document.getElementById("cronogramaCategoryFilters");
+if (cronogramaCategoryFilters) {
+  cronogramaCategoryFilters.addEventListener("click", (e) => {
+    const boton = e.target.closest(".filter-chip");
+    if (!boton) return;
+
+    cronogramaCategoryFilters.querySelectorAll(".filter-chip").forEach(chip => chip.classList.remove("filter-chip--active"));
+    boton.classList.add("filter-chip--active");
+
+    categoriaCronogramaActiva = boton.dataset.category;
+    aplicarFiltrosCronograma();
   });
 }
 
