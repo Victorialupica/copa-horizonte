@@ -52,31 +52,21 @@
   </div>
 
   <div class="filters__group" id="cronogramaCategoryFilters">
-    <button class="filter-chip filter-chip--active" data-category="todas">Todas</button>
-    <button class="filter-chip" data-category="sub-14">Sub 14</button>
-    <button class="filter-chip" data-category="sub-16">Sub 16</button>
-    <button class="filter-chip" data-category="sub-19">Sub 19</button>
-    <button class="filter-chip" data-category="intermedia">Intermedia</button>
-    <button class="filter-chip" data-category="primera">Primera</button>
-  </div>
-
-  <div class="filters__group">
-    <span class="filters__label">Fecha</span>
-    <button class="filter-chip filter-chip--active" data-fecha="todas">Todas</button>
-    <button class="filter-chip" data-fecha="1">1</button>
-    <button class="filter-chip" data-fecha="2">2</button>
+    <button class="filter-chip filter-chip--active" data-category="Todas">Todas</button>
+    <button class="filter-chip" data-category="Sub 14">Sub 14</button>
+    <button class="filter-chip" data-category="Sub 16">Sub 16</button>
+    <button class="filter-chip" data-category="Sub 19">Sub 19</button>
+    <button class="filter-chip" data-category="Intermedia">Intermedia</button>
+    <button class="filter-chip" data-category="Primera">Primera</button>
   </div>
 
   <div class="filters__group">
     <span class="filters__label">Día</span>
     <input type="date" id="dayFilter" class="date-input" />
   </div>  
-<div class="match-day">
-  <p class="match-day__date">Sábado, 22 de agosto</p>
 
-  <ul class="matches-list" id="matchesList"> <!--Nombre unico que js usa para encontrar los elementos-->
-  <!--Aqui java inserta la informacion de los partidos-->    
-  </ul>
+<div id="matchesContainer">
+<!-- JS llena esto con las fechas de los partidos -->
 </div>  
 </section>
 <script src="script.js"></script>
