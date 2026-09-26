@@ -23,49 +23,17 @@ document.querySelectorAll(".navbar__menu a").forEach((link) => {
   });
 });
 
+/*Fuentes de datos (Google Sheets)*/
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLj-lJamDKc9Y7bWZbDJUz5zThrZ-oadBfnZCPgYmOee7pX9W16iybjY2v4xCxUn1kmn5jGR0jmlJs/pub?gid=0&single=true&output=csv";
 const SHEET_EQUIPOS_CSV_URL ="https://docs.google.com/spreadsheets/d/e/2PACX-1vSLj-lJamDKc9Y7bWZbDJUz5zThrZ-oadBfnZCPgYmOee7pX9W16iybjY2v4xCxUn1kmn5jGR0jmlJs/pub?gid=53800298&single=true&output=csv"
 
-async function cargarPartidos() { // Esta funcion trae los datos de la dirección de internet. 
-  const response = await fetch(SHEET_CSV_URL); // fetch te devuelve la promesa de que el dato va a llegar
-  const csvText= await response.text();
-  const partidos = parsearCSV(csvText);
-  await cargarLogosEquipos();
-  todosLosPartidos = partidos; // guardo los partidos en una variable global para poder filtrar después
-  // Solo intenta mostrar en Cronograma si ese contenedor existe en esta página
-  if (document.getElementById("matchesContainer")) {
-  aplicarFiltrosCronograma();
-}
+// Guardamos todos los partidos una vez cargados, para no tener que
+// volver a pedirlos cada vez que cambia el filtro de categoría
+let todosLosPartidos = [];
 
-  // Solo intenta mostrar en la portada si ese contenedor existe en esta página
-  if (document.getElementById("resultsGrid")) {
-    mostrarResultadosHome(partidos);
-  }
-
-  if (document.getElementById("upcomingGrid")) {
-    mostrarProximosHome(partidos);
-  }
-
-  if (document.getElementById("standingsBody")) {
-    const categoriaActiva = document
-      .querySelector("#categoryFilters .filter-chip--active")
-      ?.dataset.category || "Sub 14";
-    mostrarPosiciones(calcularTabla(partidos, categoriaActiva));
-  }
-
-  if (document.getElementById("teamsGrid")) {
-  todosLosEquipos = calcularTodosLosEquipos(partidos);
-  aplicarFiltrosEquipos();
-  }
-  if (document.getElementById("favoriteTeamVote")) {
-  mostrarVotacionEquipoFavorito(partidos);
-  }
-  if (document.getElementById("fanIdentify")) {
-  mostrarIdentificacion();
-  }
-}
-
-
+// Esta funcion arma un diccionario con los logos de cada equipo
+let logosEquipos = {}; 
+let linksEquipos = {};
 
 function parsearCSV(texto) {
   const filas = texto.trim().split("\n");
@@ -124,141 +92,40 @@ function renderBadge(nombre) {
     : `<span class="match-card__badge">${iniciales(nombre)}</span>`;
 }
 
-function mostrarPartidos(partidos) {
-  const contenedor = document.getElementById("matchesContainer");
-  contenedor.innerHTML = "";
+async function cargarLogosEquipos() {
+  try {
+    const response = await fetch(SHEET_EQUIPOS_CSV_URL);
+    const csvText = await response.text();
+    const filas = parsearCSV(csvText);
 
-  if (partidos.length === 0) {
-    contenedor.innerHTML = `<p style="text-align:center; color: var(--color-cream-muted); padding: 40px 0;">No hay partidos para este filtro</p>`;
-    return;
-  }
-
-  // Agrupamos los partidos por su fecha
-  const grupos = {};
-  const ordenDeFechas = [];
-
-  partidos.forEach(partido => {
-    const fecha = partido.fecha;
-    if (!grupos[fecha]) {
-      grupos[fecha] = [];
-      ordenDeFechas.push(fecha); // guardamos el orden de aparición de cada fecha
-    }
-    grupos[fecha].push(partido);
-  });
-
-  // Por cada fecha distinta, armamos su propio bloque con su propia lista
-  ordenDeFechas.forEach(fecha => {
-    const bloque = document.createElement("div");
-    bloque.className = "match-day";
-    bloque.innerHTML = `<p class="match-day__date">${fecha}</p>`;
-
-    const lista = document.createElement("ul");
-    lista.className = "matches-list";
-
-    grupos[fecha].forEach(partido => {
-      const tarjeta = document.createElement("li");
-      tarjeta.className = "match-card";
-      tarjeta.innerHTML = `
-        <div class="match-card__meta">
-          <span class="match-card__status">${partido.estado}</span>
-          <span class="match-card__category">${partido.categoria}</span>
-        </div>
-        <div class="match-card__team">
-          <span class="match-card__team-name">${partido.equipo_local}</span>
-          <span class="match-card__badge">${iniciales(partido.equipo_local)}</span>
-        </div>
-        <div class="match-card__score">
-          <span>${partido.goles_local}</span>
-          <span class="match-card__score-sep">-</span>
-          <span>${partido.goles_visitante}</span>
-        </div>
-        <div class="match-card__team match-card__team--away">
-          <span class="match-card__badge">${iniciales(partido.equipo_visitante)}</span>
-          <span class="match-card__team-name">${partido.equipo_visitante}</span>
-        </div>
-        <div class="match-card__info">
-          <span><i class="fa-solid fa-location-dot"></i> ${partido.cancha}</span>
-          <span class="match-card__info-row"><i class="fa-solid fa-clock"></i> Horario: ${partido.horario || "-"}</span>
-        </div>
-      `;
-      lista.appendChild(tarjeta);
+    filas.forEach(fila => {
+      if (fila.nombre_equipo && fila.logo_url) {
+       logosEquipos[fila.nombre_equipo.trim()] = armarLinkImagenDrive(fila.logo_url.trim());
+      }
+      if (fila.nombre_equipo && fila.link_equipo) {
+        linksEquipos[fila.nombre_equipo.trim()] = fila.link_equipo.trim();
+      }
+      
     });
-
-    bloque.appendChild(lista);
-    contenedor.appendChild(bloque);
-  });
-}
-function mostrarResultadosHome(partidos) {
-  const contenedor = document.getElementById("resultsGrid");
-  contenedor.innerHTML = "";
-
-  const finalizados = partidos.filter(partido => partido.estado === "Final");
-  const ultimosTres = finalizados.slice(0, 3);
-
-  ultimosTres.forEach(partido => {
-    const tarjeta = document.createElement("div");
-    tarjeta.className = "result-card";
-    tarjeta.innerHTML = `
-      <div class="result-card__meta">
-        <span class="result-card__status">${partido.estado}</span>
-        <span class="result-card__info">${partido.categoria} · ${partido.fecha}</span>
-      </div>
-      <div class="result-card__match">
-        <div class="result-card__team">
-          ${renderBadge(partido.equipo_local)}
-        </div>
-        <span class="result-card__score">${partido.goles_local} — ${partido.goles_visitante}</span>
-        <div class="result-card__team">
-          ${renderBadge(partido.equipo_visitante)}
-      </div>
-    `;
-    contenedor.appendChild(tarjeta);
-  });
-}
-
-function mostrarProximosHome(partidos) {
-  const contenedor = document.getElementById("upcomingGrid");
-  contenedor.innerHTML = "";
-
-  const proximos = partidos.filter(partido => partido.estado === "Próximo");
-  const proximosTres = proximos.slice(0, 3); // mostramos solo los 3 más cercanos
-
-  if (proximosTres.length === 0) {
-    contenedor.innerHTML = `
-      <div class="empty-state">
-        <i class="fa-regular fa-calendar"></i>
-        <p>No hay partidos programados proximamente.</p>
-      </div>
-    `;
-    return;
+    
+  } catch (error) {
+    console.error("No se pudieron cargar los logos:", error);
+    // Si falla, logosEquipos queda vacío y todo sigue funcionando con iniciales
   }
 
-  proximosTres.forEach(partido => {
-    const tarjeta = document.createElement("div");
-    tarjeta.className = "result-card";
-    tarjeta.innerHTML = `
-      <div class="result-card__meta">
-      <span class="result-card__status">${partido.estado}</span>
-      <span class="result-card__info">${partido.categoria} · ${partido.fecha}</span>
-      </div>
-      <div class="result-card__match">
-      <div class="result-card__team">
-      ${renderBadge(partido.equipo_local)}
-      </div>
-      <span class="result-card__score">vs</span>
-      <div class="result-card__team">
-      ${renderBadge(partido.equipo_visitante)}
-      </div>
-      </div>
-    `;
-    contenedor.appendChild(tarjeta);
-  });
 }
 
+// Extrae el ID de un link de Google Drive, sin importar el formato exacto
+// que tenga (uc?export=view&id=..., /file/d/.../view, etc.)
+function extraerIdDrive(url) {
+  const match = url.match(/[-\w]{25,}/); // busca una cadena larga de letras/números/guiones
+  return match ? match[0] : null;
+}
 
-// Guardamos todos los partidos una vez cargados, para no tener que
-// volver a pedirlos cada vez que cambia el filtro de categoría
-let todosLosPartidos = [];
+function armarLinkImagenDrive(url) {
+  const id = extraerIdDrive(url);
+  return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w200` : url;
+}
 
 function crearEquipoVacio(nombre) {
   return { nombre, pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, dg: 0, pts: 0 };
@@ -314,351 +181,41 @@ function calcularTabla(partidos, categoria) {
   return equipos;
 }
 
-function mostrarPosiciones(equipos) {
-  const tbody = document.getElementById("standingsBody");
-  const contador = document.getElementById("teamsCount");
+async function cargarPartidos() { // Esta funcion trae los datos de la dirección de internet. 
+  const response = await fetch(SHEET_CSV_URL); // fetch te devuelve la promesa de que el dato va a llegar
+  const csvText= await response.text();
+  const partidos = parsearCSV(csvText);
+  await cargarLogosEquipos();
+  todosLosPartidos = partidos; // guardo los partidos en una variable global para poder filtrar después
+  // Solo intenta mostrar en Cronograma si ese contenedor existe en esta página
+  if (document.getElementById("matchesContainer")) {
+  aplicarFiltrosCronograma();
+}
 
-  contador.textContent = `${equipos.length} equipo${equipos.length === 1 ? "" : "s"}`;
-  tbody.innerHTML = "";
-
-  if (equipos.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; color: var(--color-cream-muted); padding: 30px;">Todavía no hay partidos finalizados en esta categoría</td></tr>`;
-    return;
+  // Solo intenta mostrar en la portada si ese contenedor existe en esta página
+  if (document.getElementById("resultsGrid")) {
+    mostrarResultadosHome(partidos);
   }
 
-  equipos.forEach((equipo, index) => {
-    const puesto = index + 1;
-    const fila = document.createElement("tr");
-    fila.innerHTML = `
-      <td><span class="rank-badge ${puesto === 1 ? "rank-badge--leader" : ""}">${puesto}</span></td>
-      <td>${equipo.nombre}</td>
-      <td>${equipo.pj}</td>
-      <td>${equipo.g}</td>
-      <td>${equipo.e}</td>
-      <td>${equipo.p}</td>
-      <td>${equipo.gf}</td>
-      <td>${equipo.gc}</td>
-      <td class="${equipo.dg > 0 ? "dg-positivo" : equipo.dg < 0 ? "dg-negativo" : ""}">${equipo.dg > 0 ? "+" : ""}${equipo.dg}</td>
-      <td>${equipo.pts}</td>
-    `;
-    tbody.appendChild(fila);
-  });
-}
-
-const categoryFilters = document.getElementById("categoryFilters");
-if (categoryFilters) {
-  categoryFilters.addEventListener("click", (e) => {
-    const boton = e.target.closest(".filter-chip");
-    if (!boton) return;
-
-    categoryFilters
-      .querySelectorAll(".filter-chip")
-      .forEach(chip => chip.classList.remove("filter-chip--active"));
-    boton.classList.add("filter-chip--active");
-
-    mostrarPosiciones(calcularTabla(todosLosPartidos, boton.dataset.category));
-  });
-}
-
-// Pagina de equipos
-// Esta funcion arma un diccionario con los logos de cada equipo
-let logosEquipos = {}; 
-let linksEquipos = {}; 
-async function cargarLogosEquipos() {
-  try {
-    const response = await fetch(SHEET_EQUIPOS_CSV_URL);
-    const csvText = await response.text();
-    const filas = parsearCSV(csvText);
-
-    filas.forEach(fila => {
-      if (fila.nombre_equipo && fila.logo_url) {
-       logosEquipos[fila.nombre_equipo.trim()] = armarLinkImagenDrive(fila.logo_url.trim());
-      }
-      if (fila.nombre_equipo && fila.link_equipo) {
-        linksEquipos[fila.nombre_equipo.trim()] = fila.link_equipo.trim();
-      }
-      
-    });
-    
-  } catch (error) {
-    console.error("No se pudieron cargar los logos:", error);
-    // Si falla, logosEquipos queda vacío y todo sigue funcionando con iniciales
+  if (document.getElementById("upcomingGrid")) {
+    mostrarProximosHome(partidos);
   }
 
-}
-
-// Extrae el ID de un link de Google Drive, sin importar el formato exacto
-// que tenga (uc?export=view&id=..., /file/d/.../view, etc.)
-function extraerIdDrive(url) {
-  const match = url.match(/[-\w]{25,}/); // busca una cadena larga de letras/números/guiones
-  return match ? match[0] : null;
-}
-
-function armarLinkImagenDrive(url) {
-  const id = extraerIdDrive(url);
-  return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w200` : url;
-}
-
-/*Pagina de equipos*/
- let todosLosEquipos = [];
- let categoriaEquipoActiva = "Todos";
- let busquedaEquipo = "";
- function calcularTodosLosEquipos(partidos) {
-  const categorias = [...new Set(partidos.map(p => p.categoria))];
-  let todos = [];
-  categorias.forEach(categoria => {
-    const tabla = calcularTabla(partidos, categoria);
-    tabla.forEach(equipo => (equipo.categoria = categoria));
-    todos = todos.concat(tabla);
-  });
-  return todos;
-}
-
-function mostrarEquipos(equipos) {
-  const contenedor = document.getElementById("teamsGrid");
-  const subtitulo = document.getElementById("teamsSubtitle");
-  subtitulo.textContent = `${equipos.length} equipo${equipos.length === 1 ? "" : "s"} · Temporada 2026`;
-  contenedor.innerHTML = "";
-
-  if (equipos.length === 0) {
-    contenedor.innerHTML = `<p style="color: var(--color-cream-muted); grid-column: 1;text-align: center; padding: 40px 0;">No se encontraron equipos</p>`;
-    return;
+  if (document.getElementById("standingsBody")) {
+    const categoriaActiva = document
+      .querySelector("#categoryFilters .filter-chip--active")
+      ?.dataset.category || "Sub 14";
+    mostrarPosiciones(calcularTabla(partidos, categoriaActiva));
   }
 
-  equipos.forEach(equipo => {
-    const logo = logosEquipos[equipo.nombre];
-    const link = linksEquipos[equipo.nombre];
-    const tarjeta = document.createElement("a");
-    tarjeta.className = "team-card";
-    if (link) {
-      tarjeta.href = link;
-      tarjeta.target = "_blank";
-      tarjeta.rel = "noopener";
-    }
-    tarjeta.innerHTML = `
-      ${logo
-  ? `<img src="${logo}" alt="${equipo.nombre}" class="team-card__badge" style="object-fit: contain; background: var(--color-bg-dark);" onerror="this.outerHTML='<div class=&quot;team-card__badge&quot;>${iniciales(equipo.nombre)}</div>'" />`
-  : `<div class="team-card__badge">${iniciales(equipo.nombre)}</div>`
-      }
-      <div class="team-card__name">${equipo.nombre}</div>
-      <div class="team-card__category">${equipo.categoria}</div>
-      <div class="team-card__stats">
-        <span class="team-card__pj">${equipo.pj} PJ</span>
-        <span class="team-card__pts">${equipo.pts} pts</span>
-      </div>
-    `;
-    contenedor.appendChild(tarjeta);
-  });
-}
-
-// Aplica los dos filtros (categoría + búsqueda por texto) juntos
-function aplicarFiltrosEquipos() {
-  const filtrados = todosLosEquipos.filter(equipo => {
-    const coincideCategoria =
-      categoriaEquipoActiva === "Todos" || equipo.categoria === categoriaEquipoActiva;
-    const coincideBusqueda = equipo.nombre
-      .toLowerCase()
-      .includes(busquedaEquipo.toLowerCase());
-    return coincideCategoria && coincideBusqueda;
-  });
-
-  mostrarEquipos(filtrados);
-}
-
-const teamCategoryFilters = document.getElementById("teamCategoryFilters");
-if (teamCategoryFilters) {
-  teamCategoryFilters.addEventListener("click", (e) => {
-    const boton = e.target.closest(".filter-chip");
-    if (!boton) return;
-
-    teamCategoryFilters
-      .querySelectorAll(".filter-chip")
-      .forEach(chip => chip.classList.remove("filter-chip--active"));
-    boton.classList.add("filter-chip--active");
-
-    categoriaEquipoActiva = boton.dataset.category;
-    aplicarFiltrosEquipos();
-  });
-}
-
-const teamSearch = document.getElementById("teamSearch");
-if (teamSearch) {
-  teamSearch.addEventListener("input", (e) => {
-    busquedaEquipo = e.target.value;
-    aplicarFiltrosEquipos();
-  });
-}
-
-/*Filtros de cronograma*/
-let estadoCronogramaActivo = "todos";
-let categoriaCronogramaActiva = "Todas";
-
-function aplicarFiltrosCronograma() {
-  const filtrados = todosLosPartidos.filter(partido => {
-    const coincideEstado =
-      estadoCronogramaActivo === "todos" ||
-      (estadoCronogramaActivo === "proximos" && partido.estado === "Próximo") ||
-      (estadoCronogramaActivo === "finalizados" && partido.estado === "Final");
-
-    const coincideCategoria =
-      categoriaCronogramaActiva === "Todas" || partido.categoria === categoriaCronogramaActiva;
-
-    return coincideEstado && coincideCategoria;
-  });
-
-  mostrarPartidos(filtrados);
-}
-
-const statusFilters = document.getElementById("statusFilters");
-if (statusFilters) {
-  statusFilters.addEventListener("click", (e) => {
-    const boton = e.target.closest(".filter-chip");
-    if (!boton) return;
-
-    statusFilters.querySelectorAll(".filter-chip").forEach(chip => chip.classList.remove("filter-chip--active"));
-    boton.classList.add("filter-chip--active");
-
-    estadoCronogramaActivo = boton.dataset.filter;
-    aplicarFiltrosCronograma();
-  });
-}
-
-const cronogramaCategoryFilters = document.getElementById("cronogramaCategoryFilters");
-if (cronogramaCategoryFilters) {
-  cronogramaCategoryFilters.addEventListener("click", (e) => {
-    const boton = e.target.closest(".filter-chip");
-    if (!boton) return;
-
-    cronogramaCategoryFilters.querySelectorAll(".filter-chip").forEach(chip => chip.classList.remove("filter-chip--active"));
-    boton.classList.add("filter-chip--active");
-
-    categoriaCronogramaActiva = boton.dataset.category;
-    aplicarFiltrosCronograma();
-  });
-}
-
-/*Pagina fanaticos*/
-
-/*Votacion equipo favorito*/ 
-function obtenerListaEquipos(partidos) {
-  const nombres = partidos.flatMap(p => [p.equipo_local, p.equipo_visitante]);
-  return [...new Set(nombres)].filter(Boolean).sort();
-}
-
-function obtenerVotos() {
-  const guardado = localStorage.getItem("votosEquipoFavorito");
-  return guardado ? JSON.parse(guardado) : {};
-}
-
-function guardarVoto(equipo) {
-  if (!nombreFanatico()) {
-    alert("Por favor, identificate primero para poder votar.");
-    return;
+  if (document.getElementById("teamsGrid")) {
+  todosLosEquipos = calcularTodosLosEquipos(partidos);
+  aplicarFiltrosEquipos();
   }
-  const votos = obtenerVotos();
-  votos[equipo] = (votos[equipo] || 0) + 1;
-  localStorage.setItem("votosEquipoFavorito", JSON.stringify(votos));
-  localStorage.setItem("miVotoEquipoFavorito", equipo);
-}
-
-function miVotoActual() {
-  return localStorage.getItem("miVotoEquipoFavorito");
-}
-
-function mostrarVotacionEquipoFavorito(partidos) {
-  const contenedor = document.getElementById("favoriteTeamVote");
-  const equipos = obtenerListaEquipos(partidos);
-  const votos = obtenerVotos();
-  const totalVotos = Object.values(votos).reduce((suma, n) => suma + n, 0);
-  const votoActual = miVotoActual();
-
-  const barras = equipos.map(equipo => {
-    const cantidad = votos[equipo] || 0;
-    const porcentaje = totalVotos > 0 ? Math.round((cantidad / totalVotos) * 100) : 0;
-    return `
-      <div class="vote-bar-row">
-        <div class="vote-bar-row__top">
-          <span>${equipo}</span>
-          <span>${porcentaje}% · ${cantidad} voto${cantidad === 1 ? "" : "s"}</span>
-        </div>
-        <div class="vote-bar-track">
-          <div class="vote-bar-fill" style="width: ${porcentaje}%"></div>
-        </div>
-      </div>
-    `;
-  }).join("");
-
-  const botones = equipos.map(equipo => `
-    <button
-      class="filter-chip ${equipo === votoActual ? "filter-chip--active" : ""}"
-      data-equipo="${equipo}"
-    >${equipo}</button>
-  `).join("");
-
-  contenedor.innerHTML = `
-    ${barras}
-    <div class="vote-buttons">${botones}</div>
-    ${votoActual ? `<p class="vote-confirmation">✓ Ya votaste por ${votoActual}</p>` : ""}
-  `;
-
-  contenedor.querySelectorAll(".vote-buttons .filter-chip").forEach(boton => {
-    boton.addEventListener("click", () => {
-      guardarVoto(boton.dataset.equipo);
-      mostrarVotacionEquipoFavorito(partidos); // volvemos a dibujar todo, con el voto ya contado
-    });
-  });
-}
-
-/*Identificación de fanáticos*/
-function nombreFanatico() {
-  return localStorage.getItem("nombreFanatico");
-}
-
-function guardarNombreFanatico(nombre) {
-  localStorage.setItem("nombreFanatico", nombre);
-}
-
-function borrarNombreFanatico() {
-  localStorage.removeItem("nombreFanatico");
-}
-
-function mostrarIdentificacion() {
-  const contenedor = document.getElementById("fanIdentify");
-  const nombre = nombreFanatico();
-
-  if (nombre) {
-    // Ya se identificó: mostramos el saludo
-    contenedor.innerHTML = `
-      <div class="identify-greeting">
-        <span>👋 Hola, <strong>${nombre}</strong></span>
-        <button id="cambiarNombreBtn">No soy ${nombre}</button>
-      </div>
-    `;
-    document.getElementById("cambiarNombreBtn").addEventListener("click", () => {
-      borrarNombreFanatico();
-      mostrarIdentificacion();
-    });
-  } else {
-    // Todavía no se identificó: mostramos el formulario
-    contenedor.innerHTML = `
-      <div class="identify-card">
-        <p>Identificate para poder votar</p>
-        <input type="text" id="nombreInput" class="identify-input" placeholder="Tu nombre" />
-        <button class="btn btn--primary" id="guardarNombreBtn">Continuar</button>
-      </div>
-    `;
-    document.getElementById("guardarNombreBtn").addEventListener("click", () => {
-      const input = document.getElementById("nombreInput");
-      const valor = input.value.trim();
-      if (valor === "") {
-        input.focus();
-        return;
-      }
-      guardarNombreFanatico(valor);
-      mostrarIdentificacion();
-    });
+  if (document.getElementById("favoriteTeamVote")) {
+  mostrarVotacionEquipoFavorito(partidos);
+  }
+  if (document.getElementById("fanIdentify")) {
+  mostrarIdentificacion();
   }
 }
-
-cargarPartidos();
-
