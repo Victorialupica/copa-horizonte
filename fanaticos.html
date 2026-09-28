@@ -30,6 +30,7 @@
       <a href="fanaticos.html" class="active">Fanáticos</a>
       <a href="equipos.html">Equipos</a>
       <a href="contacto.html">Contacto</a>
+      <button class="navbar__auth" id="authBtn" type="button">Ingresar</button>
     </nav>
   </header>
 
@@ -39,10 +40,6 @@
       <p class="page-header__subtitle">Votá y hacé sentir tu apoyo · Temporada 2026</p>
     </div>
     <i class="fa-solid fa-heart page-header__icon"></i>
-  </section>
-
-  <section class="fan-identify" id="fanIdentify">
-    <!-- JS llena esto: el formulario, o el saludo si ya te identificaste -->
   </section>
 
   <section class="fan-section">
@@ -62,6 +59,66 @@
     <a href="#" class="floating-buttons__btn floating-buttons__btn--whatsapp" aria-label="WhatsApp">
       <i class="fa-brands fa-whatsapp"></i>
     </a>
+  </div>
+
+  <!-- MODAL DE ACCESO -->
+  <div class="modal" id="authModal">
+    <div class="modal__overlay" id="authOverlay"></div>
+
+    <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <button class="modal__close" id="authClose" type="button" aria-label="Cerrar">&times;</button>
+
+      <!-- Vista 1: iniciar sesión -->
+      <div id="loginView">
+        <h2 class="modal__title" id="authTitle">Iniciá sesión para votar</h2>
+        <p class="modal__subtitle">Tu voto queda asociado a tu usuario</p>
+
+        <form id="loginForm">
+          <label class="modal__label" for="loginUser">Usuario</label>
+          <input class="modal__input" type="text" id="loginUser" autocomplete="username" />
+
+          <label class="modal__label" for="loginPass">Contraseña</label>
+          <input class="modal__input" type="password" id="loginPass" autocomplete="current-password" />
+
+          <p class="modal__error" id="loginError" hidden>Usuario o contraseña incorrectos</p>
+
+          <button class="btn btn--primary modal__submit" type="submit">Ingresar</button>
+        </form>
+
+        <p class="modal__switch">
+          ¿No tenés cuenta?
+          <button class="modal__link" id="showRegister" type="button">Creá una</button>
+        </p>
+      </div>
+
+      <!-- Vista 2: crear cuenta (solo visual) -->
+      <div id="registerView" hidden>
+        <h2 class="modal__title">Creá tu cuenta</h2>
+        <p class="modal__subtitle">Sumate para votar y predecir resultados</p>
+
+        <form id="registerForm">
+          <label class="modal__label" for="regUser">Usuario</label>
+          <input class="modal__input" type="text" id="regUser" />
+
+          <label class="modal__label" for="regPass">Contraseña</label>
+          <input class="modal__input" type="password" id="regPass" />
+
+          <label class="modal__label" for="regPass2">Repetí la contraseña</label>
+          <input class="modal__input" type="password" id="regPass2" />
+
+          <p class="modal__note" id="registerNote" hidden>
+            Esta es una demo: la creación de cuentas todavía no está habilitada.
+          </p>
+
+          <button class="btn btn--primary modal__submit" type="submit">Crear cuenta</button>
+        </form>
+
+        <p class="modal__switch">
+          ¿Ya tenés cuenta?
+          <button class="modal__link" id="showLogin" type="button">Iniciá sesión</button>
+        </p>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>
