@@ -1,0 +1,185 @@
+/* Layout: formulario a la izquierda, datos de contacto a la derecha */
+.contact {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 24px;
+  padding: 40px 40px 60px;
+  align-items: start;
+}
+
+/* Tarjeta del formulario */
+.contact-card {
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-navy);
+  border-radius: 12px;
+  padding: 28px;
+}
+
+.contact-card__title {
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  color: var(--color-cream);
+  margin-bottom: 22px;
+}
+
+/* Campos */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-field label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-cream-muted);
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  background: var(--color-bg);
+  border: 1px solid var(--color-navy);
+  color: var(--color-cream);
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: var(--color-cream-muted);
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: var(--color-gold);
+}
+
+/* Campo con error (lo marca el JS) */
+.form-field--error input,
+.form-field--error select,
+.form-field--error textarea {
+  border-color: var(--color-danger);
+}
+
+.form-error {
+  color: #e2a094;
+  font-size: 0.85rem;
+  min-height: 1.2em;
+  margin-bottom: 12px;
+}
+
+/* Botón enviar (reusa .btn .btn--primary de styles.css) */
+.contact-form__submit {
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+.contact-form__submit:disabled {
+  opacity: 0.6;
+  cursor: wait;
+  transform: none;
+}
+
+/* Mensaje de éxito */
+.form-success {
+  text-align: center;
+  padding: 30px 10px;
+}
+
+.form-success[hidden] {
+  display: none;
+}
+
+.form-success i {
+  font-size: 3rem;
+  color: var(--color-gold);
+  margin-bottom: 14px;
+}
+
+.form-success h3 {
+  font-family: var(--font-title);
+  font-size: 1.3rem;
+  color: var(--color-cream);
+  margin-bottom: 8px;
+}
+
+.form-success p {
+  color: var(--color-cream-muted);
+  margin-bottom: 20px;
+}
+
+/* Columna de datos de contacto */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-navy);
+  border-radius: 12px;
+  padding: 18px 20px;
+  transition: border-color 0.15s ease;
+}
+
+.info-item:hover {
+  border-color: var(--color-gold);
+}
+
+.info-item i {
+  font-size: 1.3rem;
+  color: var(--color-gold);
+  width: 26px;
+  text-align: center;
+}
+
+.info-item h3 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-cream-muted);
+  margin-bottom: 2px;
+}
+
+.info-item p {
+  color: var(--color-cream);
+  font-size: 0.95rem;
+}
+
+/* Celulares: todo en una columna */
+@media (max-width: 768px) {
+  .contact {
+    grid-template-columns: 1fr;
+    padding: 24px 20px 60px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

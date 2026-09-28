@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacto — Copa Horizonte</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles-contacto.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar__brand">
+      <img src="assets/logo-escudo-transparente.png" alt="Escudo Copa Horizonte" class="navbar__logo" />
+      <span class="navbar__title">COPA <strong>HORIZONTE</strong></span>
+    </div>
+
+    <button class="navbar__toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="navbar__menu" id="navMenu">
+      <a href="index.html">Inicio</a>
+      <a href="cronograma.html">Cronograma</a>
+      <a href="posiciones.html">Posiciones</a>
+      <a href="fanaticos.html">Fanáticos</a>
+      <a href="equipos.html">Equipos</a>
+      <a href="contacto.html" class="active">Contacto</a>
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <div class="page-header__text">
+      <h1 class="page-header__title">Contacto</h1>
+      <p class="page-header__subtitle">Escribinos tu consulta · Temporada 2026</p>
+    </div>
+    <i class="fa-solid fa-envelope page-header__icon"></i>
+  </section>
+
+  <main class="contact">
+
+    <!-- Columna izquierda: formulario -->
+    <section class="contact-card">
+      <h2 class="contact-card__title">Enviá tu consulta</h2>
+
+      <form id="contactForm" novalidate>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="cNombre">Nombre</label>
+            <input type="text" id="cNombre" name="nombre" placeholder="Tu nombre" required />
+          </div>
+
+          <div class="form-field">
+            <label for="cEmail">Email</label>
+            <input type="email" id="cEmail" name="email" placeholder="tuemail@ejemplo.com" required />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="cMotivo">Motivo</label>
+          <select id="cMotivo" name="motivo" required>
+            <option value="">Elegí un motivo...</option>
+            <option>Consulta general</option>
+            <option>Inscripción de equipo</option>
+            <option>Cronograma y canchas</option>
+            <option>Resultados o posiciones</option>
+            <option>Otro</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="cMensaje">Mensaje</label>
+          <textarea id="cMensaje" name="mensaje" rows="6" placeholder="Contanos en qué podemos ayudarte..." required></textarea>
+        </div>
+
+        <p class="form-error" id="formError" role="alert"></p>
+
+        <button type="submit" class="btn btn--primary contact-form__submit" id="contactSubmit">
+          <i class="fa-solid fa-paper-plane"></i> Enviar consulta
+        </button>
+      </form>
+
+      <!-- Mensaje que aparece después de "enviar" (oculto al inicio) -->
+      <div class="form-success" id="formSuccess" hidden>
+        <i class="fa-solid fa-circle-check"></i>
+        <h3>¡Consulta enviada!</h3>
+        <p>Gracias por escribirnos. Te vamos a responder a la brevedad.</p>
+        <button type="button" class="filter-chip" id="newMessage">Enviar otra consulta</button>
+      </div>
+    </section>
+
+    <!-- Columna derecha: datos de contacto -->
+    <aside class="contact-info">
+      <div class="info-item">
+        <i class="fa-solid fa-envelope"></i>
+        <div>
+          <h3>Email</h3>
+          <p>contacto@copahorizonte.com</p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <i class="fa-brands fa-instagram"></i>
+        <div>
+          <h3>Instagram</h3>
+          <p>@copahorizonte</p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <i class="fa-brands fa-whatsapp"></i>
+        <div>
+          <h3>WhatsApp</h3>
+          <p>+54 351 000 0000</p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <i class="fa-solid fa-location-dot"></i>
+        <div>
+          <h3>Sede</h3>
+          <p>Córdoba, Argentina</p>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+  <div class="floating-buttons">
+    <a href="#" class="floating-buttons__btn floating-buttons__btn--instagram" aria-label="Instagram">
+      <i class="fa-brands fa-instagram"></i>
+    </a>
+    <a href="#" class="floating-buttons__btn floating-buttons__btn--whatsapp" aria-label="WhatsApp">
+      <i class="fa-brands fa-whatsapp"></i>
+    </a>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="script-contacto.js"></script>
+</body>
+</html>
