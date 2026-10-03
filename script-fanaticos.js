@@ -67,6 +67,7 @@ authBtn.addEventListener("click", () => {
     cerrarSesion();
     actualizarBotonAuth();
     mostrarVotacionEquipoFavorito(todosLosPartidos);
+    mostrarPredicciones(todosLosPartidos);
   } else {
     abrirModal("login");
   }
@@ -90,6 +91,7 @@ loginForm.addEventListener("submit", (e) => {
     cerrarModal();
     actualizarBotonAuth();
     mostrarVotacionEquipoFavorito(todosLosPartidos);
+    mostrarPredicciones(todosLosPartidos);
   } else {
     loginError.hidden = false;
   }
@@ -183,6 +185,105 @@ function mostrarVotacionEquipoFavorito(partidos) {
     boton.addEventListener("click", () => {
       if (guardarVoto(boton.dataset.equipo)) {
         mostrarVotacionEquipoFavorito(partidos);
+      }
+    });
+  });
+}
+
+/*Predicciones de proximos partidos*/
+function generarIdPartido(partido) {
+  return `${partido.fecha}__${partido.categoria}__${partido.equipo_local}__${partido.equipo_visitante}`;
+}
+
+function obtenerPrediccionesPorUsuario(){
+  const guardado = localStorage.getItem("prediccionesPorUsuario");
+  return guardado ? JSON.parse(guardado) : {};
+}
+
+function guardarPrediccion(idPartido, equipo) {
+  const usuario = usuarioActual();
+  if (!usuario) {
+    abrirModal("login");
+    return false;
+  }
+  const todas = obtenerPrediccionesPorUsuario();
+  if (!todas[usuario]) todas[usuario] = {};
+  todas[usuario][idPartido] = equipo;
+  localStorage.setItem("prediccionesPorUsuario", JSON.stringify(todas));
+  return true;
+}
+
+function miPrediccion(idPartido) {
+  const usuario = usuarioActual();
+  if (!usuario) return null;
+  return (obtenerPrediccionesPorUsuario()[usuario] || {})[idPartido] || null;
+}
+
+function contarPredicciones(idPartido) {
+  const conteo = {};
+  Object.values(obtenerPrediccionesPorUsuario()).forEach(prediccionesDeEseUsuario => {
+    const elegido = prediccionesDeEseUsuario[idPartido];
+    if (elegido) conteo[elegido] = (conteo[elegido] || 0) + 1;
+  });
+  return conteo;
+}
+
+function mostrarPredicciones(partidos) {
+  const contenedor = document.getElementById("predictionsList");
+  const proximos = partidos.filter(p => p.estado === "Próximo");
+
+  if (proximos.length === 0) {
+    contenedor.innerHTML = `<p class="predict-row__empty">No hay partidos próximos para predecir todavía</p>`;
+    return;
+  }
+
+  contenedor.innerHTML = proximos.map(partido => {
+    const id = generarIdPartido(partido);
+    const conteo = contarPredicciones(id);
+    const votosLocal = conteo[partido.equipo_local] || 0;
+    const votosVisitante = conteo[partido.equipo_visitante] || 0;
+    const total = votosLocal + votosVisitante;
+    const pctLocal = total > 0 ? Math.round((votosLocal / total) * 100) : 0;
+    const pctVisitante = total > 0 ? 100 - pctLocal : 0;
+    const elegido = miPrediccion(id);
+
+    return `
+      <div class="predict-row">
+        <div class="predict-row__meta">${partido.categoria}<br>${partido.fecha}</div>
+
+        <div class="predict-side">
+          ${renderBadge(partido.equipo_local)}
+          <span class="predict-side__name">${partido.equipo_local}</span>
+        </div>
+        <button class="filter-chip predict-row__btn ${elegido === partido.equipo_local ? "filter-chip--active" : ""}" data-id="${id}" data-equipo="${partido.equipo_local}">
+          ${elegido === partido.equipo_local ? "✓ Tu voto" : "Votar"}
+        </button>
+
+        <div class="predict-row__bar-area">
+          ${total > 0 ? `
+            <div class="predict-row__pct-row"><span>${pctLocal}%</span><span>${pctVisitante}%</span></div>
+            <div class="predict-row__bar">
+              <div class="predict-row__bar-fill--local" style="width:${pctLocal}%"></div>
+              <div class="predict-row__bar-fill--away" style="width:${pctVisitante}%"></div>
+            </div>
+          ` : `<p class="predict-row__empty">Sin predicciones todavía</p>`}
+        </div>
+
+        <button class="filter-chip predict-row__btn ${elegido === partido.equipo_visitante ? "filter-chip--active" : ""}" data-id="${id}" data-equipo="${partido.equipo_visitante}">
+          ${elegido === partido.equipo_visitante ? "✓ Tu voto" : "Votar"}
+        </button>
+        <div class="predict-side predict-side--away">
+          <span class="predict-side__name">${partido.equipo_visitante}</span>
+          ${renderBadge(partido.equipo_visitante)}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  contenedor.querySelectorAll(".predict-row__btn").forEach(boton => {
+    boton.addEventListener("click", () => {
+      if (guardarPrediccion(boton.dataset.id, boton.dataset.equipo)) {
+        mostrarPredicciones(partidos);
       }
     });
   });

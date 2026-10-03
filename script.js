@@ -218,4 +218,7 @@ async function cargarPartidos() { // Esta funcion trae los datos de la direcció
   if (document.getElementById("fanIdentify")) {
   mostrarIdentificacion();
   }
+  if (document.getElementById("predictionsList")) {
+  mostrarPredicciones(partidos);
+}
 }

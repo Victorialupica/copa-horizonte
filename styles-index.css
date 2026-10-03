@@ -1,6 +1,4 @@
-/* =========================================================
-   3. HERO (sección principal, la más grande de la imagen)
-   ========================================================= */
+/* Sección principal */
 .hero {
   position: relative;
   min-height: 90vh;
@@ -10,11 +8,13 @@
   text-align: center;
   overflow: hidden;
 
-  background:
-    radial-gradient(circle at 50% 30%, rgba(199, 162, 51, 0.28), transparent 60%),
-    linear-gradient(180deg, var(--color-bg-dark) 0%, #16301f 45%, var(--color-navy) 100%);
-  background-size: cover;
-  background-position: center;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--color-bg-dark) 0,
+    var(--color-bg-dark) 10px,
+    #16301f 10px,
+    #16301f 20px
+  );
 }
 
 /* Capa oscura semitransparente encima de la foto, para que el
@@ -22,14 +22,17 @@
 .hero__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(18, 39, 26, 0.55) 0%, rgba(18, 39, 26, 0.85) 100%);
+  background: rgba(18, 39, 26, 0.35);
 }
 
 .hero__content {
   position: relative; /* para quedar por encima del overlay */
   z-index: 2;
   max-width: 700px;
-  padding: 0 20px;
+  padding: 48px 40px;
+  background: rgba(18, 39, 26, 0.88);
+  border: 1px solid rgba(199, 162, 51, 0.5);
+  border-radius: 16px;
 }
 
 .hero__title {
